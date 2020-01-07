@@ -1,5 +1,5 @@
 view: session_list {
-  sql_table_name: CORE.SessionList ;;
+  sql_table_name: TESTLAND.CORE.SESSIONLISTIDENT;;
 
   dimension_group: broadcastendtime {
     type: time

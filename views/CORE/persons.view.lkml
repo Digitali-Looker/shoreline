@@ -1,5 +1,5 @@
 view: persons {
-  sql_table_name: CORE.Persons ;;
+  sql_table_name: "TESTLAND"."CORE"."Persons" ;;
   drill_fields: [id]
 
   dimension: id {
@@ -64,6 +64,18 @@ view: persons {
   dimension: userkey {
     type: string
     sql: ${TABLE}."USERKEY" ;;
+  }
+
+  dimension: age {
+    type:  number
+    sql: FLOOR(DATEDIFF('day', ${birthdate_raw}, ${session_list.dateofactivity_raw}) / 365.25)  ;;
+  }
+
+  dimension: age_group {
+    type: tier
+    tiers: [4,16,25,35,45,55,65]
+    style: integer
+    sql: ${age} ;;
   }
 
   measure: count {

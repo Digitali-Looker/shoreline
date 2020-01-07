@@ -32,10 +32,10 @@ explore: timeline {
     relationship: many_to_one
   }
 
-  join: persons {
-    sql_on: ${persons.personnumber} = ${viewerline.personnumber} ;;
-    relationship: many_to_one
-  }
+#   join: persons {
+#     sql_on: ${persons.personnumber} = ${viewerline.personnumber} ;;
+#     relationship: many_to_one
+#   }
 
   join: house_holds {
     sql_on: ${house_holds.householdnumber} = ${viewerline.householdnumber} ;;

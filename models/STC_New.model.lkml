@@ -10,7 +10,11 @@ datagroup: shoreline_default_datagroup {
 
 persist_with: shoreline_default_datagroup
 
-explore: session_schedules {}
+#explore: persons {}
+
+#explore: session_schedules {}
+
+#explore: prog_reach {}
 
 explore: sessionline {
 
@@ -20,9 +24,21 @@ explore: sessionline {
     relationship: many_to_one
     }
 
+    join: prog_reach {
+      sql_on: ${sessionline.sessionlineid} = ${prog_reach.sessionlineid} ;;
+      type: inner
+      relationship: one_to_one
+    }
+
+    join: total_tv {
+      sql_on: ${scheduleline.timerange_raw} = ${total_tv.timerange_raw} ;;
+      relationship: many_to_one
+      type: inner
+    }
+
 
   join: persons {
-    sql_on: ${persons.personnumber} = ${sessionline.personnumber} ;;
+    sql_on: ${persons.personnumber} = ${sessionline.personnumber} and ${persons.householdnumber} = ${sessionline.householdnumber} ;;
     type: inner
     relationship: many_to_one
   }
@@ -47,6 +63,12 @@ explore: sessionline {
 
   join: channelmaster {
     sql_on: ${sessionline.db2_stationcode} = ${channelmaster.db2_stationcode} ;;
+    type: inner
+    relationship: many_to_one
+  }
+
+  join: session_list {
+    sql_on: ${session_list.sessionid} = ${sessionline.sessionid} ;;
     type: inner
     relationship: many_to_one
   }

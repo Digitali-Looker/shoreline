@@ -34,10 +34,10 @@ view: sessionline {
     sql: ${TABLE}."PROCESSINGWEIGHT" ;;
   }
 
-  dimension: pvfid {
+  dimension: sessionid {
     type: number
     value_format_name: id
-    sql: ${TABLE}."PVFID" ;;
+    sql: ${TABLE}."SESSIONID" ;;
   }
 
   dimension: sessionrowno {
@@ -64,11 +64,16 @@ view: sessionline {
     drill_fields: []
   }
 
-  dimension: ProgRowNo {
-    type: number
-    sql: ROW_NUMBER () OVER (PARTITION BY ${householdnumber}, ${personnumber}, ${scheduleline.scheduleid} ORDER BY ${scheduleline.timerange_raw}) ;;
-  }
+ measure: reach2 {
+   type: sum
+    sql: case when ${prog_reach.prog_row_no} = 3 then ${processingweight} else 0 end ;;
+ }
 
+
+dimension: is_guest {
+  type: number
+  sql: case when ${personnumber} = 131072 then 1 else 0 end ;;
+}
 
 
   measure: avg000s {
