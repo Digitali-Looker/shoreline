@@ -51,6 +51,17 @@ explore: channel_min {
       type: inner
     }
 
+    join: reach_test_query_dependent {
+      sql_on:
+      ${channel_min.db2stationcode}=${reach_test_query_dependent.db2_stationcode} and
+      ${channel_min.timerange_raw}=${reach_test_query_dependent.timerange_raw}
+      --${house_holds.householdnumber}=${reach_test_query_dependent.householdnumber} and
+      --${persons.personnumber}=${reach_test_query_dependent.personnumber}
+      ;;
+      type: inner
+      relationship: many_to_one
+    }
+
 
   join: persons {
     sql_on: ${persons.personnumber} = ${sessionline.personnumber} and ${persons.householdnumber} = ${sessionline.householdnumber} ;;

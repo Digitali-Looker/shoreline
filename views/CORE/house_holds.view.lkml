@@ -1,5 +1,5 @@
 view: house_holds {
-  sql_table_name: CORE.HouseHolds ;;
+  sql_table_name: "TESTLAND"."CORE"."HouseHolds" ;;
   drill_fields: [id]
 
   dimension: id {
