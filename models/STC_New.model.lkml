@@ -16,10 +16,25 @@ persist_with: shoreline_default_datagroup
 
 #explore: prog_reach {}
 
-explore: sessionline {
+explore: channel_min {
+
+
+
+  join: sessionline {
+    sql_on: ${channel_min.db2stationcode} = ${sessionline.db2_stationcode} and ${sessionline.timerange_raw} = ${channel_min.timerange_raw} ;;
+    type: inner
+    relationship: one_to_many
+  }
+
+  join: avg_thou {
+    sql_on: ${channel_min.timerange_raw} = ${avg_thou.timerange_raw} and ${channel_min.db2stationcode} = ${avg_thou.db2_stationcode} ;;
+    relationship: one_to_one
+
+  }
+
 
   join: scheduleline {
-    sql_on: ${sessionline.db2_stationcode} = ${scheduleline.stationcode} and ${scheduleline.timerange_raw} = ${sessionline.timerange_raw} ;;
+    sql_on: ${channel_min.db2stationcode} = ${scheduleline.stationcode} and ${scheduleline.timerange_raw} = ${channel_min.timerange_raw} ;;
     type: inner
     relationship: many_to_one
     }
@@ -31,7 +46,7 @@ explore: sessionline {
     }
 
     join: total_tv {
-      sql_on: ${scheduleline.timerange_raw} = ${total_tv.timerange_raw} ;;
+      sql_on: ${channel_min.timerange_raw} = ${total_tv.timerange_raw} ;;
       relationship: many_to_one
       type: inner
     }
@@ -56,13 +71,13 @@ explore: sessionline {
   }
 
   join: channel_list {
-    sql_on: ${channel_list.db1_stationcode}   = ${sessionline.dbstationcode} ;;
+    sql_on: ${channel_list.db2_stationcode}   = ${channel_min.db2stationcode} ;;
     type: inner
     relationship: many_to_one
   }
 
   join: channelmaster {
-    sql_on: ${sessionline.db2_stationcode} = ${channelmaster.db2_stationcode} ;;
+    sql_on: ${channel_min.db2stationcode} = ${channelmaster.db2_stationcode} ;;
     type: inner
     relationship: many_to_one
   }
