@@ -9,27 +9,63 @@ view: reach_test_query_dependent{
   derived_table: {
 
     explore_source: channel_min {
-
+#content stuff
     column: db2_stationcode {field:sessionline.db2_stationcode}
     column: programmename {field:pet02.programmename}
     column: scheduleid {field:scheduleline.scheduleid}
+    #date stuff
      column: timerange_raw {field:sessionline.timerange_raw}
-     column: householdnumber {field:sessionline.householdnumber}
-     column: personnumber {field:sessionline.personnumber}
-     column: sample_date_weight  {field:sample_date_weights.sample_date_weight}
-      derived_column: pk {
+       #Demo stuff
+       column: householdnumber {field:sessionline.householdnumber}
+       column: personnumber {field:sessionline.personnumber}
+         #actual figures to sum across
+         column: sample_date_weight  {field:sample_date_weights.sample_date_weight}
+         column: hh_sample_date_weight {field:sample_date_weights.hh_sample_date_weight}
+
+        #Primary key - not sure is needed here as it's not PDT
+        derived_column: pk {
         sql: ROW_NUMBER() OVER (ORDER BY timerange_raw)  ;;
-      }
-    derived_column: rowno {
-      sql: ROW_NUMBER () OVER (PARTITION BY householdnumber, personnumber,
+        }
 
 
-        {% if pet02.actualstarttime_time._in_query %} scheduleid
-        {%else%} 1
-            {% endif %}
+              derived_column: rowno {
+                sql: ROW_NUMBER () OVER (PARTITION BY householdnumber, personnumber,
+                {% if channel_min.db2stationcode._in_query %} db2_stationcode
+                  {%else%} 1
+                      {% endif %},
+                {% if pet02.programmename._in_query %} programmename
+                  {%else%} 1
+                      {% endif %},
+                {% if pet02.actualstarttime_time._in_query %} scheduleid
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_year._in_query %} year(timerange_raw)
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_quarter._in_query %} date_part(q,timerange_raw)
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_month._in_query %} month(timerange_raw)
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_week._in_query or channel_min.timerange_week_of_year._in_query %} weekiso(timerange_raw)
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_day_of_week._in_query %} dayofweekiso(timerange_raw)
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_date._in_query %} to_date(timerange_raw)
+                  {%else%} 1
+                      {% endif %},
+                {% if channel_min.timerange_hour._in_query %} date_part(hour,timerange_raw)
+                  {%else%} 1
+                      {% endif %}
 
-      ORDER BY timerange_raw) ;;
-    }
+
+                ORDER BY householdnumber, personnumber,timerange_raw) ;;
+              }
+
+
     bind_all_filters: yes
       }
 
@@ -73,9 +109,13 @@ view: reach_test_query_dependent{
 
 
     measure: reach2 {
+      description: "Please use channel_min timerange to show a reach breakdown (from year to an hour) and pet02 actual start time to break down by tx"
       type: sum
-      sql: case when ${rowno} = 3 then ${sample_date_weight} else 0 end  ;;
+      sql: isnull(case when ${rowno} = 3 then ${sample_date_weight} else 0 end,0)  ;;
     }
+
+
+
 
 #   filter: time_range_selection {
 #     type: date

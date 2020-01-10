@@ -31,7 +31,7 @@ view: sessionline {
 
   dimension: processingweight {
     type: number
-    sql: ${TABLE}."PROCESSINGWEIGHT" ;;
+    sql: isnull(${TABLE}."PROCESSINGWEIGHT",0) ;;
   }
 
   dimension: sessionid {

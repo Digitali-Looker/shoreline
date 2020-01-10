@@ -18,7 +18,8 @@ view: sample_date_weights {
       )
 
 
-    SELECT middledate.middledate sample_date, w."HOUSEHOLDNUMBER" householdnumber, w."PERSONNUMBER" personnumber, w."PROCESSINGWEIGHT" sample_weight
+    SELECT middledate.middledate sample_date, w."HOUSEHOLDNUMBER" householdnumber, w."PERSONNUMBER" personnumber, w."PROCESSINGWEIGHT" sample_weight,
+    avg(w.processingweight) over (partition by middledate.middledate, w."HOUSEHOLDNUMBER" order by w."HOUSEHOLDNUMBER") HH_sample_weight
     FROM "TESTLAND"."CORE"."Weights_50" AS w
 
 
@@ -41,10 +42,17 @@ view: sample_date_weights {
         sql: ${TABLE}.personnumber ;;
         #hidden: yes
       }
+
       dimension: sample_date_weight {
         type: number
         sql: ${TABLE}.sample_weight ;;
       }
+
+      dimension: hh_sample_date_weight {
+        type: number
+        sql: ${TABLE}.HH_sample_weight ;;
+      }
+
       dimension: sample_date {
         type: date
         sql: ${TABLE}.sample_date ;;
