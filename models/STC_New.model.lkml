@@ -22,7 +22,7 @@ explore: channel_min {
 
   join: sessionline {
     sql_on: ${channel_min.db2stationcode} = ${sessionline.db2_stationcode} and ${sessionline.timerange_raw} = ${channel_min.timerange_raw} ;;
-    type: inner
+    type: left_outer
     relationship: one_to_many
   }
 
@@ -35,7 +35,7 @@ explore: channel_min {
 
   join: scheduleline {
     sql_on: ${channel_min.db2stationcode} = ${scheduleline.stationcode} and ${scheduleline.timerange_raw} = ${channel_min.timerange_raw} ;;
-    type: inner
+    type: left_outer
     relationship: many_to_one
     }
 
@@ -58,7 +58,7 @@ explore: channel_min {
       --${house_holds.householdnumber}=${reach_test_query_dependent.householdnumber} and
       --${persons.personnumber}=${reach_test_query_dependent.personnumber}
       ;;
-      type: inner
+      type: left_outer
       relationship: many_to_one
     }
 
@@ -96,8 +96,17 @@ explore: channel_min {
   join: session_list {
     sql_on: ${session_list.sessionid} = ${sessionline.sessionid} ;;
     type: inner
+    #this might need to be left
     relationship: many_to_one
   }
+
+  join: sample_date_weights {
+   sql_on: ${sample_date_weights.household_number}=${sessionline.householdnumber} and ${sample_date_weights.person_number}=${sessionline.personnumber} ;;
+      type: left_outer
+    relationship: many_to_one
+    sql_where: ${sample_date_weights.sample_date_weight} is not null  ;;
+  }
+
 
 
 }

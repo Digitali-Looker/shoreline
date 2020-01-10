@@ -37,6 +37,11 @@ view: channel_min {
 
   }
 
+  filter: time_range_selection {
+    type: date
+    sql: {% condition time_range_selection %} ${timerange_raw} {% endcondition %} ;;
+    }
+
 
 
 }

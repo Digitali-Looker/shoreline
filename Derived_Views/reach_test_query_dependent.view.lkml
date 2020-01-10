@@ -77,5 +77,14 @@ view: reach_test_query_dependent{
       sql: case when ${rowno} = 1 then ${processingweight} else 0 end  ;;
     }
 
+#   filter: time_range_selection {
+#     type: date
+#     sql: {% condition time_range_selection %} ${timerange_raw} {% endcondition %} ;;
+#   }
+
+#   dimension: sample_date_2 {
+#     type: date
+#     sql: DATEADD(DAY, floor((DATEDIFF(DAY,min(${timerange_raw}), max(${timerange_raw}))/2)),min(${timerange_raw})) ;;
+#   }
 
     }
