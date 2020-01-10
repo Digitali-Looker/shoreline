@@ -108,14 +108,24 @@ view: reach_test_query_dependent{
     }
 
 
+
+
+
+
     measure: reach2 {
       description: "Please use channel_min timerange to show a reach breakdown (from year to an hour) and pet02 actual start time to break down by tx"
       type: sum
-      sql: isnull(case when ${rowno} = 3 then ${sample_date_weight} else 0 end,0)  ;;
+      sql: {%if channel_min.reach_continuous_minutes._in_query %} case when ${rowno} =  ${channel_min.reach_cont_minutes} then ${sample_date_weight} else 0 end,0
+       {%else%} case when ${rowno} =  3 then ${sample_date_weight} else 0 end,0 {%endif%}
+      ;;
     }
 
-
-
+#{%if channel_min.reach_continuous_minutes%} {{channel_min.reach_continuous_minutes}} {%else%} "3" {% endif %}
+#   sql: case when ${rowno} =  {%if reach_continuous_minutes._in_query %}
+#   --{% condition reach_continuous_minutes %}
+#   ${reach_cont_minutes}
+#   --{% endcondition %}
+#   {%else%} 3 {%endif%} then ${sample_date_weight} else 0 end,0  ;;
 
 #   filter: time_range_selection {
 #     type: date
