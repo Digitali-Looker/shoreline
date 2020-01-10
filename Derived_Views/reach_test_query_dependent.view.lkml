@@ -16,7 +16,7 @@ view: reach_test_query_dependent{
      column: timerange_raw {field:sessionline.timerange_raw}
      column: householdnumber {field:sessionline.householdnumber}
      column: personnumber {field:sessionline.personnumber}
-     column: processingweight  {field:sessionline.processingweight}
+     column: sample_date_weight  {field:sample_date_weights.sample_date_weight}
       derived_column: pk {
         sql: ROW_NUMBER() OVER (ORDER BY timerange_raw)  ;;
       }
@@ -58,7 +58,7 @@ view: reach_test_query_dependent{
   dimension: personnumber {
     type: number
   }
-  dimension: processingweight {
+  dimension: sample_date_weight {
     type: number
   }
   dimension: rowno {
@@ -68,13 +68,13 @@ view: reach_test_query_dependent{
 
     measure: reach1 {
       type: sum
-      sql: ${processingweight} ;;
+      sql: ${sample_date_weight} ;;
     }
 
 
     measure: reach2 {
       type: sum
-      sql: case when ${rowno} = 1 then ${processingweight} else 0 end  ;;
+      sql: case when ${rowno} = 3 then ${sample_date_weight} else 0 end  ;;
     }
 
 #   filter: time_range_selection {
