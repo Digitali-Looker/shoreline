@@ -30,7 +30,7 @@ view: reach_test_query_dependent{
 
               derived_column: rowno {
                 sql: ROW_NUMBER () OVER (PARTITION BY householdnumber, personnumber,
-                {% if channel_min.db2stationcode._in_query %} db2_stationcode
+                {% if channel_min.db2stationcode._in_query or channelmaster.db2_stationname._in_query %} db2_stationcode
                   {%else%} 1
                       {% endif %},
                 {% if pet02.programmename._in_query %} programmename
@@ -102,21 +102,12 @@ view: reach_test_query_dependent{
   }
   dimension: pk {primary_key:yes}
 
-    measure: reach1 {
-      type: sum
-      sql: ${sample_date_weight} ;;
-    }
-
-
-
-
 
 
     measure: reach2 {
       description: "Please use channel_min timerange to show a reach breakdown (from year to an hour) and pet02 actual start time to break down by tx"
       type: sum
-      sql: {%if channel_min.reach_continuous_minutes._in_query %} case when ${rowno} =  ${channel_min.reach_cont_minutes} then ${sample_date_weight} else 0 end,0
-       {%else%} case when ${rowno} =  3 then ${sample_date_weight} else 0 end,0 {%endif%}
+      sql: case when ${rowno} =  {% parameter channel_min.reach_cont_minutes %} then ${sample_date_weight} else 0 end,0
       ;;
     }
 

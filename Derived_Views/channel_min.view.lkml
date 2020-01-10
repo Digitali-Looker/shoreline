@@ -63,15 +63,12 @@ view: channel_min {
     }
   }
 
-  dimension: reach_cont_minutes {
-    type: number
-  }
-
-  filter: reach_continuous_minutes {
+  parameter: reach_cont_minutes {
     type: number
     default_value: "3"
-    sql: {% condition reach_continuous_minutes %} ${reach_cont_minutes} {% endcondition %} ;;
+
   }
+
 
 
 
