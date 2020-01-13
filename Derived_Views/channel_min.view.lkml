@@ -42,13 +42,18 @@ view: channel_min {
 
   }
 
+
+
+#######FILTERS AND PARAMETERS#####
+
+
   filter: time_range_selection {
     type: date
     sql: {% condition time_range_selection %} ${timerange_raw} {% endcondition %} ;;
     }
 
 
-#ONLY REACH CALCULATION IS AFFECTED BY THIS ATM
+#THIS IS FOR REACH CALCULATION, POTENTIALLY CAN BE EXTRAPOLATED ON OTHER MEASURES AS WELL, NOT USED YET
   parameter: panel_level {
     label: "Panel Level"
     description: "Only applies to Reach calculation for the time-being"
@@ -63,6 +68,7 @@ view: channel_min {
     }
   }
 
+#ONLY FOR REACH CALCULATION
   parameter: reach_cont_minutes {
     type: number
     default_value: "3"

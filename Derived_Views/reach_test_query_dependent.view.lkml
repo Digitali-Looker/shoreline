@@ -61,9 +61,10 @@ view: reach_test_query_dependent{
                   {%else%} 1
                       {% endif %}
 
+                      ;;}
 
-                ORDER BY householdnumber, personnumber,timerange_raw) ;;
-              }
+
+
 
 
     bind_all_filters: yes
