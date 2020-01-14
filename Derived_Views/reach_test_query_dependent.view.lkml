@@ -60,8 +60,9 @@ view: reach_test_query_dependent{
                 {% if channel_min.timerange_hour._in_query %} date_part(hour,timerange_raw)
                   {%else%} 1
                       {% endif %}
-
-                      ;;}
+                  Order by timerange_raw)
+                      ;;
+                      }
 
 
 
