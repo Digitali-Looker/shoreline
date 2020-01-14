@@ -15,7 +15,7 @@ view: pet02 {
     sql: ${TABLE}."ACTUALENDTIME" ;;
   }
 
-#USE THIS FOR TX BREAK-DOWN!
+
   dimension_group: actualstarttime {
     type: time
     timeframes: [
@@ -54,6 +54,7 @@ view: pet02 {
     sql: ${TABLE}."CONSOLIDATEDENDTIME" ;;
   }
 
+#USE THIS INSTEAD OF ACTUALSTARTTIME FOR TX BREAK-DOWN!
   dimension_group: consolidatedstarttime {
     type: time
     timeframes: [

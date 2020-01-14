@@ -36,7 +36,7 @@ view: reach_test_query_dependent{
                 {% if pet02.programmename._in_query %} programmename
                   {%else%} 1
                       {% endif %},
-                {% if pet02.actualstarttime_time._in_query %} scheduleid
+                {% if pet02.consolidatedstarttime_time._in_query %} scheduleid
                   {%else%} 1
                       {% endif %},
                 {% if channel_min.timerange_year._in_query %} year(timerange_raw)
@@ -73,10 +73,8 @@ view: reach_test_query_dependent{
 
     }
 
-#     {% elsif select_date_window._parameter_value == "'month'" %} analytics.daily_usage_summary_month
-#             {% elsif select_date_window._parameter_value == "'year'" %} analytics.daily_usage_summary_year
-#             {% elsif select_date_window._parameter_value == "'school_year'" %} analytics.daily_usage_summary_school_year
-#             {% else %} analytics.daily_usage_summary_school_year
+##POTENTIALLY ADD AGE, AGE GROUP, GENDER AND SEC GROUP AS DIVIDERS AS WELL, BIND ALL FILTERS SHOULD APPLY ANY DEMOGRAPHIC FILTERS TO THE TABLE WHICH WILL NARROW IT DOWN TO THE SELECTED PPL
+#THIS SHOULDN'T AFFECT THE MINUTES THOUGH, CAUSE ITS THEN JOINED TO CHANNEL_MIN AS A LEFT OUTER JOIN.
 
   dimension: db2_stationcode {
     type: number
@@ -113,21 +111,6 @@ view: reach_test_query_dependent{
       ;;
     }
 
-#{%if channel_min.reach_continuous_minutes%} {{channel_min.reach_continuous_minutes}} {%else%} "3" {% endif %}
-#   sql: case when ${rowno} =  {%if reach_continuous_minutes._in_query %}
-#   --{% condition reach_continuous_minutes %}
-#   ${reach_cont_minutes}
-#   --{% endcondition %}
-#   {%else%} 3 {%endif%} then ${sample_date_weight} else 0 end,0  ;;
 
-#   filter: time_range_selection {
-#     type: date
-#     sql: {% condition time_range_selection %} ${timerange_raw} {% endcondition %} ;;
-#   }
-
-#   dimension: sample_date_2 {
-#     type: date
-#     sql: DATEADD(DAY, floor((DATEDIFF(DAY,min(${timerange_raw}), max(${timerange_raw}))/2)),min(${timerange_raw})) ;;
-#   }
 
     }
